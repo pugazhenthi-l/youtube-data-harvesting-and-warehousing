@@ -1,4 +1,4 @@
-# YouTube Data Harvesting and Warehousing
+<h1 align="center">YouTube Data Harvesting and Warehousing</h1>
 
 ![Alt text](youtube_project.png)
 
