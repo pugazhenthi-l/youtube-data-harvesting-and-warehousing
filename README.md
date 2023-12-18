@@ -11,11 +11,11 @@ This involves fetching comprehensive data such as channel information, video det
 This Python script is designed for extracting, processing, and managing data from YouTube using the YouTube API. It includes functionalities for connecting to the YouTube API, retrieving channel and video information, and managing data in databases.
 
 ## Features
-- **YouTube API Integration**: Connects to the YouTube API to fetch data about channels, videos, and comments.
-- **Database Interaction**: Supports operations with MySQL, PyMySQL, and MongoDB for data storage and management.
-- **Data Processing**: Utilizes Pandas for efficient data manipulation and analysis.
-- **Web Interface**: Includes Streamlit integration for potential web application deployment.
-- **Image Processing**: Uses PIL for image-related operations, possibly for thumbnails or other media from YouTube.
+- **YouTube API Integration**: The script interacts with the YouTube API. This is evident from the use of the `build` function with parameters related to the YouTube API service.
+- **Database Connectivity**: Supports operations with MySQL, PyMySQL, and MongoDB for data storage and management.
+- **Data Processing**:  The script uses `pandas`, a powerful data analysis and manipulation library, indicating that it processes data, possibly YouTube data fetched via the API.
+- **Visualization**: The presence of `streamlit` and `PIL` (Python Imaging Library) suggests that the script might be creating visualizations or a web interface to display data.
+
 
 ## Dependencies
 - `googleapiclient`
