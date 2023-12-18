@@ -1,4 +1,3 @@
-readme_content = """
 # YouTube Data Harvesting and Warehousing
 
 ## Overview
@@ -40,11 +39,4 @@ This Python script is designed for extracting, processing, and managing data fro
 - Ensure you have a valid YouTube API key before attempting to connect.
 - Database credentials and configurations need to be set up prior to running database-related operations.
 - The script may require additional setup for Streamlit if used for web deployment.
-"""
 
-# Save the content to a markdown file
-readme_file_path = '/mnt/data/README.md'
-with open(readme_file_path, 'w') as file:
-    file.write(readme_content)
-
-readme_file_path
