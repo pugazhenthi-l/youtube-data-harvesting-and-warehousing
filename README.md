@@ -1,5 +1,8 @@
 # YouTube Data Harvesting and Warehousing
 
+![Alt text](youtube_project.png)
+
+
 ## Problem Statement
 The primary objective of this system is to create a robust tool that facilitates the extraction, analysis, and management of data from various YouTube channels. 
 This involves fetching comprehensive data such as channel information, video details, and user comments using the YouTube API, and efficiently handling this data through storage, analysis, and migration processes.
