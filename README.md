@@ -1,6 +1,10 @@
 # YouTube Data Harvesting and Warehousing
 
-## Overview
+## Problem Statement
+The primary objective of this system is to create a robust tool that facilitates the extraction, analysis, and management of data from various YouTube channels. 
+This involves fetching comprehensive data such as channel information, video details, and user comments using the YouTube API, and efficiently handling this data through storage, analysis, and migration processes.
+
+## Solution Overview
 This Python script is designed for extracting, processing, and managing data from YouTube using the YouTube API. It includes functionalities for connecting to the YouTube API, retrieving channel and video information, and managing data in databases.
 
 ## Features
