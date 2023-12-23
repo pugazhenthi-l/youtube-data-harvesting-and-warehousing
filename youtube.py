@@ -557,12 +557,19 @@ def show_comments_tables():
 st.header(":red[YouTube] Data Harvesting & Warehousing")
 
 with st.sidebar:
-    st.header("Skill Take Away")
-    st.caption("_- Python Scripting_")
-    st.caption("_- Data Collection_")
-    st.caption("_- MongoDB_")
-    st.caption("_- API Integration_")
-    st.caption("_- Data Management using MongoDB and SQL_")
+    st.header("Skill Take Away:")
+    st.caption("_- Proficient in Python scripting._")
+    st.caption("_- Experienced in data collection from external sources._")
+    st.caption("_- Skilled in managing MongoDB and MySQL databases._")
+    st.caption("_- Capable of integrating APIs, like the YouTube Data API._")
+    st.caption("_- Proficient in data manipulation and cleaning._")
+    st.caption("_- Able to create web interfaces using Streamlit._")
+    st.caption("_- Competent in writing and executing SQL queries._")
+    st.caption("_- Effective error handling and exception management._")
+
+    st.header("Knowledge Takeaways:")
+    st.caption("_- Knowledge of the YouTube Data API for fetching data._")
+    st.caption("_- Familiarity with data formats, datetime handling, and API key management._")
 
 
 channel_id=st.text_input("Enter the Channel ID")
@@ -656,7 +663,7 @@ elif question=="5. Which videos have the highest number of likes, and what are t
     cursor.execute(query5)
     mydb.commit()
     t5=cursor.fetchall()
-    st.write(pd.DataFrame(t5, columns=["channel name","video name","comment count"]))
+    st.write(pd.DataFrame(t5, columns=["channel name","video name","likes count"]))
 
 
 elif question=="6. What is the total number of likes and dislikes for each video, and what are their corresponding video names?":
