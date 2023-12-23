@@ -1,3 +1,8 @@
+# YOUTUBE DATA HARVESTING AND WAREHOUSING SCRIPT
+
+# Setup and Initial Imports
+# Imports necessary libraries for API connections, database operations, data manipulation, and creating a web interface.
+
 from googleapiclient.discovery import build
 import mysql.connector
 import pymysql
@@ -8,22 +13,25 @@ import re
 import streamlit as st
 from PIL import Image
 
-#API Key connection 
-
+# YouTube API Connection
+# Establishes a connection to the YouTube API using a developer key.
 def api_connect():
     api_id="AIzaSyCkUV169hHVuT0jd8kmaKvDsQu8yWARM5w"
     api_service_name="youtube"
     api_version="v3"
 
+# `build` function from `googleapiclient.discovery` is used to create a YouTube service object.
     youtube=build(api_service_name,api_version,developerKey=api_id)
 
     return youtube
 
 youtube=api_connect()
 
-#get channel information
 
+# DATA RETRIEVAL FUNCTIONS:
 
+# Fetching Channel Information:
+    # Retrieves information about a specific YouTube channel like name, ID, subscriber count, etc.
 def get_channel_info(channel_id):
     request=youtube.channels().list(
                             part="snippet,ContentDetails,statistics",
@@ -41,9 +49,9 @@ def get_channel_info(channel_id):
                   Playlist_Id=i["contentDetails"]["relatedPlaylists"]["uploads"])
     return data
 
-#get video ids
 
-
+# Extracting Video IDs:
+    # Obtains a list of video IDs from the specified channel's playlist.
 def get_video_ids(channel_id):
     video_ids=[]
     response=youtube.channels().list(id=channel_id,
@@ -67,8 +75,8 @@ def get_video_ids(channel_id):
     return video_ids
 
 
-# Get video information
-
+# Gathering Video Information:
+    # Collects detailed information about each video using their IDs.
 def get_video_info(video_ids):
     video_data=[]
     for video_id in video_ids:
@@ -97,8 +105,9 @@ def get_video_info(video_ids):
             video_data.append(data)
     return video_data
 
-# get comment information
 
+# Extracting Comment Data:
+    # Gathers comments from specific videos.
 def get_comment_info(video_ids):
     comment_data=[]
     try:
@@ -124,8 +133,9 @@ def get_comment_info(video_ids):
 
     return comment_data
 
-# get playlist info:
 
+# Getting Playlist Details:
+    # Fetches details about playlists within a channel.
 def get_playlist_details(channel_id):
 
     next_page_token=None
@@ -157,8 +167,9 @@ def get_playlist_details(channel_id):
 
     return playlist_data
 
-# connect to mongodb
 
+# MongoDB Integration:
+    # Connects to MongoDB and defines operations for storing YouTube data.
 client=pymongo.MongoClient("mongodb://localhost:27017")
 db=client["YouTube_data"]
 
@@ -176,9 +187,10 @@ def channel_details(channel_id):
     
     return "upload completed successfully"
 
+# MYSQL DATABASE OPERATIONS:
 
-#table creation for channels
-
+#Creating Channels Table:
+    # Sets up a MySQL table for storing channel details
 def channels_table():
 
     mydb=pymysql.connect(host="127.0.0.1",
@@ -218,7 +230,6 @@ def channels_table():
     df=pd.DataFrame(ch_list)    
 
 
-
     for index,row in df.iterrows():
         insert_query='''insert into channels(Channel_Name,
                                             Channel_Id,
@@ -245,7 +256,8 @@ def channels_table():
             print("Channels values are already inserted")
 
 
-#table creation for playlists
+#Creating Playlists Table:
+    # Creates a MySQL table for playlist information.
 
 def playlists_table():
 
@@ -303,9 +315,8 @@ def playlists_table():
         mydb.commit()
 
 
-
-# table creation for videos
-
+# Creating Videos Table:
+    # Establishes a MySQL table for video details.
 def videos_table():
     mydb=pymysql.connect(host="127.0.0.1",
                     user="root",
@@ -411,8 +422,8 @@ def videos_table():
             mydb.commit()
 
 
-#table creation for comments.
-
+#Creating Comments Table:
+    # Sets up a MySQL table for comments data.
 def comments_table():
 
     mydb=pymysql.connect(host="127.0.0.1",
@@ -467,6 +478,8 @@ def comments_table():
         cursor.execute(insert_query, values)
         mydb.commit()
 
+
+# Function to Create Database Tables
 def tables():
     channels_table()
     playlists_table()
@@ -476,6 +489,7 @@ def tables():
     return "Tables created successfully"
 
 
+# Retrieves channel information from the "channel_details" collection in MongoDB, converts it into a DataFrame.
 def show_channels_tables():
     ch_list=[]
 
@@ -490,6 +504,7 @@ def show_channels_tables():
     return df
 
 
+# Retrieves playlist information from the "channel_details" collection in MongoDB, converts it into a DataFrame.
 def show_playlists_tables():
     pl_list=[]
 
@@ -505,6 +520,7 @@ def show_playlists_tables():
     return df1
 
 
+# Retrieves video information from the "channel_details" collection in MongoDB, converts it into a DataFrame.
 def show_videos_tables():
     vi_list=[]
 
@@ -520,6 +536,7 @@ def show_videos_tables():
     return df2
 
 
+# Retrieves comment information from the "channel_details" collection in MongoDB, converts it into a DataFrame.
 def show_comments_tables():
     cmt_list=[]
 
@@ -535,8 +552,8 @@ def show_comments_tables():
     return df3
 
 
-#streamlit part
-
+#STREAMLIT WEB INTERFACE:
+    # Utilizes Streamlit to create a user-friendly web interface for data collection and visualization.
 st.header(":red[YouTube] Data Harvesting & Warehousing")
 
 with st.sidebar:
@@ -583,8 +600,8 @@ elif show_table=="COMMENTS":
     show_comments_tables()
 
 
-#SQL connections:
-
+#SQL Queries for Analysis:
+    # Provides a selection of SQL queries for data analysis and displays the results in the Streamlit interface.
 mydb=pymysql.connect(host="127.0.0.1",
                 user="root",
                 password="root",
