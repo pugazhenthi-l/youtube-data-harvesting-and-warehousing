@@ -12,9 +12,9 @@ This Python script is designed for extracting, processing, and managing data fro
 
 ## Features
 - **YouTube API Integration**: The script interacts with the YouTube API. This is evident from the use of the `build` function with parameters related to the YouTube API service.
-- **Database Connectivity**: Supports operations with MySQL, PyMySQL, and MongoDB for data storage and management.
+- **Database Connectivity**: Supports operations with MySQL and MongoDB for data storage and management.
 - **Data Processing**:  The script uses `pandas`, a powerful data analysis and manipulation library, indicating that it processes data, possibly YouTube data fetched via the API.
-- **Visualization**: The presence of `streamlit` and `PIL` (Python Imaging Library) suggests that the script might be creating visualizations or a web interface to display data.
+- **Visualization**: The presence of `streamlit` for visualizations and a web interface to display data.
 
 
 ## Dependencies
@@ -24,9 +24,7 @@ This Python script is designed for extracting, processing, and managing data fro
 - `pymongo`
 - `pandas`
 - `datetime`
-- `re`
 - `streamlit`
-- `PIL`
 
 ## Functions
 - `api_connect()`: Establishes connection to the YouTube API.
@@ -34,11 +32,12 @@ This Python script is designed for extracting, processing, and managing data fro
 - `get_video_ids(channel_id)`: Fetches video IDs for a given channel.
 - `get_video_info(video_ids)`: Gathers information about specific videos.
 - `get_comment_info(video_ids)`: Extracts comments from specified videos.
+- `tables()`: Creates database tables of channels, videos, comments and playlist.
 
 ## Usage
 1. **API Connection**: Set up the YouTube API key and establish a connection.
 2. **Data Retrieval**: Use provided functions to fetch data about channels, videos, and comments.
-3. **Data Storage and Management**: Store and manage the retrieved data in MySQL, PyMySQL, or MongoDB databases.
+3. **Data Storage and Management**: Store and manage the retrieved data in MySQL and MongoDB databases.
 4. **Data Processing and Analysis**: Process and analyze the data using Pandas.
 5. **Web Interface and Image Processing**: Utilize Streamlit for web deployment and PIL for image processing tasks.
 
