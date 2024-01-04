@@ -1,6 +1,6 @@
 <h1 align="center">YouTube Data Harvesting and Warehousing</h1>
 
-![Alt text](youtube_project.png)
+![Alt text](project_thumbnail_1.png)
 
 
 ## Problem Statement
