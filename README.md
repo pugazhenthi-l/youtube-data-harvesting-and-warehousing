@@ -3,12 +3,10 @@
 ![Alt text](project_thumbnail_1.png)
 
 
-## Problem Statement
-The primary objective of this system is to create a robust tool that facilitates the extraction, analysis, and management of data from various YouTube channels. 
-This involves fetching comprehensive data such as channel information, video details, and user comments using the YouTube API, and efficiently handling this data through storage, analysis, and migration processes.
+This repository contains the source code and documentation for the "YouTube Data Harvesting and Warehousing" project, which is designed to efficiently harvest and warehouse data from YouTube for analytical and business purposes.
 
-## Solution Overview
-This Python script is designed for extracting, processing, and managing data from YouTube using the YouTube API. It includes functionalities for connecting to the YouTube API, retrieving channel and video information, and managing data in databases.
+## Overview
+The project involves extracting data using YouTube's API, storing it in databases, and presenting it through a user-friendly web interface. It aims to provide a comprehensive solution for businesses to leverage YouTube data for market analysis and decision-making.es.
 
 ## Features
 - **YouTube API Integration**: The script interacts with the YouTube API. This is evident from the use of the `build` function with parameters related to the YouTube API service.
@@ -16,6 +14,9 @@ This Python script is designed for extracting, processing, and managing data fro
 - **Data Processing**:  The script uses `pandas`, a powerful data analysis and manipulation library, indicating that it processes data, possibly YouTube data fetched via the API.
 - **Visualization**: The presence of `streamlit` for visualizations and a web interface to display data.
 
+## YouTube Video Explanation
+For a detailed explanation of this project and a walkthrough of the code, check out our YouTube video. This video is ideal for understanding the project's real-world applications and getting a visual insight into the functionality.
+<p align="center">🎥 [Watch the Video Here](https://youtu.be/ebwOZcAo9PA) </p>
 
 ## Dependencies
 - `googleapiclient`
