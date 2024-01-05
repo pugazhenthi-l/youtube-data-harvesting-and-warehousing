@@ -16,7 +16,7 @@ The project involves extracting data using YouTube's API, storing it in database
 
 ## YouTube Video Explanation
 For a detailed explanation of this project and a walkthrough of the code, check out our YouTube video. This video is ideal for understanding the project's real-world applications and getting a visual insight into the functionality.
-<p align="center">🎥 [Watch the Video Here](https://youtu.be/ebwOZcAo9PA). </p>
+🎥 [Watch the Video Here](https://youtu.be/ebwOZcAo9PA). 
 
 ## Dependencies
 - `googleapiclient`
@@ -46,17 +46,5 @@ For a detailed explanation of this project and a walkthrough of the code, check 
 - Ensure you have a valid YouTube API key before attempting to connect.
 - Database credentials and configurations need to be set up prior to running database-related operations.
 - The script may require additional setup for Streamlit if used for web deployment.
-
-# Project Title
-
-This is an example of adding a hyperlink to a README file on GitHub.
-
-For more information, visit [GitHub's official website](https://github.com).
-
-You can also link to other sections within the README, like [this section](#section-title).
-
-## Section Title
-
-More content here.
 
 
