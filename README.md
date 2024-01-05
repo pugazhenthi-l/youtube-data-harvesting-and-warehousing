@@ -16,7 +16,7 @@ The project involves extracting data using YouTube's API, storing it in database
 
 ## YouTube Video Explanation
 For a detailed explanation of this project and a walkthrough of the code, check out our YouTube video. This video is ideal for understanding the project's real-world applications and getting a visual insight into the functionality.
-<p align="center">🎥 [Watch the Video Here](https://youtu.be/ebwOZcAo9PA) </p>
+<p align="center">🎥 [Watch the Video Here](https://youtu.be/ebwOZcAo9PA). </p>
 
 ## Dependencies
 - `googleapiclient`
