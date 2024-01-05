@@ -47,3 +47,16 @@ For a detailed explanation of this project and a walkthrough of the code, check 
 - Database credentials and configurations need to be set up prior to running database-related operations.
 - The script may require additional setup for Streamlit if used for web deployment.
 
+# Project Title
+
+This is an example of adding a hyperlink to a README file on GitHub.
+
+For more information, visit [GitHub's official website](https://github.com).
+
+You can also link to other sections within the README, like [this section](#section-title).
+
+## Section Title
+
+More content here.
+
+
