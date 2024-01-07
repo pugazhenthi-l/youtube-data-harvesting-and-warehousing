@@ -11,7 +11,12 @@ import pandas as pd
 from datetime import datetime
 import re
 import streamlit as st
+import numpy as np
 from PIL import Image
+
+import json
+import requests
+from streamlit_lottie import st_lottie  
 
 # YouTube API Connection
 # Establishes a connection to the YouTube API using a developer key.
@@ -185,7 +190,7 @@ def channel_details(channel_id):
     coll1.insert_one({"channel_information":ch_details,"playlist_information":pl_details,
                       "video_information":vi_details,"comment_information":com_details})
     
-    return "upload completed successfully"
+    return "The data has been successfully imported into MongoDB."
 
 # MYSQL DATABASE OPERATIONS:
 
@@ -486,7 +491,7 @@ def tables():
     videos_table()
     comments_table()
 
-    return "Tables created successfully"
+    return "SQL table creation: Done    "
 
 
 # Retrieves channel information from the "channel_details" collection in MongoDB, converts it into a DataFrame.
@@ -554,27 +559,58 @@ def show_comments_tables():
 
 #STREAMLIT WEB INTERFACE:
     # Utilizes Streamlit to create a user-friendly web interface for data collection and visualization.
-st.header(":red[YouTube] Data Harvesting & Warehousing")
 
-with st.sidebar:
-    st.header("Skill Take Away:")
-    st.caption("_- Proficient in Python scripting._")
-    st.caption("_- Experienced in data collection from external sources._")
-    st.caption("_- Skilled in managing MongoDB and MySQL databases._")
-    st.caption("_- Capable of integrating APIs, like the YouTube Data API._")
-    st.caption("_- Proficient in data manipulation and cleaning._")
-    st.caption("_- Able to create web interfaces using Streamlit._")
-    st.caption("_- Competent in writing and executing SQL queries._")
-    st.caption("_- Effective error handling and exception management._")
+# Set page configuration
+st.set_page_config(layout="wide")
 
-    st.header("Knowledge Takeaways:")
-    st.caption("_- Knowledge of the YouTube Data API for fetching data._")
-    st.caption("_- Familiarity with data formats, datetime handling, and API key management._")
+# Column layout for logos
+col1, col2, col3 = st.columns([1,6,1])
+
+# Load and display YouTube logo
+with col1:
+    image = Image.open("guvi_logo.png")
+
+    new_size = (100, 40) 
+    resized_image = image.resize(new_size)
+    st.image(resized_image)
+
+# Load and display YouTube logo
+with col3:
+    image = Image.open("youtube_logo.png")
+
+    new_size = (100, 40)
+    resized_image = image.resize(new_size)
+    st.image(resized_image)
 
 
-channel_id=st.text_input("Enter the Channel ID")
+# Display the main header: Using Markdown with HTML for center alignment
+st.markdown("<h1 style='text-align: center;'>YouTube Data Harvesting & Warehousing</h1>", unsafe_allow_html=True)
+st.markdown("##")
 
-if st.button("Collect and Store data"):
+# Database connection
+mydb=pymysql.connect(host="127.0.0.1",
+                user="root",
+                password="root",
+                database="youtube_data")
+cursor=mydb.cursor()
+
+# Data display section
+col1, col2, col3 = st.columns([2, 3, 2])
+
+with col2:
+
+    with st.container():  
+        query1='''SELECT Channel_Name, Subscribers, Views, Total_Videos FROM channels; '''
+        cursor.execute(query1)
+        mydb.commit()
+        t1=cursor.fetchall()
+        st.write(pd.DataFrame(t1, columns=["Channel Name","Subscribers", "Total Views", "Total Videos"]))
+
+# Channel ID input
+channel_id = st.text_input(("Enter the Channel ID here 👇🏻"), key="channel_id")
+
+# Data import and migration buttons
+if st.button("Click and Import data to MangoDB",help="The data of the YouTube channel will be collected and stored in MangoDB"):
     ch_ids=[]
     db=client["YouTube_data"]
     coll1=db["channel_details"]
@@ -582,125 +618,132 @@ if st.button("Collect and Store data"):
         ch_ids.append(ch_data["channel_information"]["Channel_Id"])
 
     if channel_id in ch_ids:
-        st.success("Channel details of the given channel id already exist")
+        st.success("Provide a different channel ID: the current one has existing details")
 
     else:
         insert=channel_details(channel_id)
         st.success(insert)
 
-if st.button("Migrate to SQL"):
+if st.button("Click and add the data to MySQL",help="The extracted data will be migrated to SQL database"):
     Table=tables()
     st.success(Table)
 
-show_table=st.radio("SELECT THE TABLE FOR VIEW",("CHANNELS","PLAYLISTS","VIDEOS","COMMENTS"))
+# Data overview with tabs
+st.markdown("<h2 style='text-align: center;'>🗄 Overview of Data Set</h2>", unsafe_allow_html=True, help="Select a tab to view detailed data on Channels, Playlists, Videos, or Comments.")
 
-if show_table=="CHANNELS":
-    show_channels_tables()
+with st.container():
+    tab0, tab1, tab2, tab3, tab4 = st.tabs(["❄️","CHANNELS", "PLAYLISTS", "VIDEOS", "COMMENTS"])
 
-elif show_table=="PLAYLISTS":
-    show_playlists_tables()
+    with tab0:
+        st.caption("👆🏼Select a tab to view detailed data")
 
-elif show_table=="VIDEOS":
-    show_videos_tables()
+    with tab1:
+        st.header("CHANNELS")
+        show_channels_tables()
 
-elif show_table=="COMMENTS":
-    show_comments_tables()
+    with tab2:
+        st.header("PLAYLISTS")
+        show_playlists_tables()
 
+    with tab3:
+        st.header("VIDEOS")
+        show_videos_tables()
 
-#SQL Queries for Analysis:
-    # Provides a selection of SQL queries for data analysis and displays the results in the Streamlit interface.
-mydb=pymysql.connect(host="127.0.0.1",
-                user="root",
-                password="root",
-                database="youtube_data")
-cursor=mydb.cursor()
-
-question=st.selectbox("SELECT YOUR QUESTION",("1. What are the names of all the videos and their corresponding channels?",
-                                              "2. Which channels have the most number of videos, and how many videos do they have?",
-                                              "3. What are the top 10 most viewed videos and their respective channels?",
-                                              "4. How many comments were made on each video, and what are their corresponding video names?",
-                                              "5. Which videos have the highest number of likes, and what are their corresponding channel names?",
-                                              "6. What is the total number of likes and dislikes for each video, and what are their corresponding video names?",
-                                              "7. What is the total number of views for each channel, and what are their corresponding channel names?",
-                                              "8. What are the names of all the channels that have published videos in the year 2022?",
-                                              "9. What is the average duration of all videos in each channel, and what are their corresponding channel names?",
-                                              "10. Which videos have the highest number of comments, and what are their corresponding channel names?"))
+    with tab4:
+        st.header("COMMENTS")
+        show_comments_tables()
 
 
-if question=="1. What are the names of all the videos and their corresponding channels?":
-    query1='''select title as videos, channel_name as channelname from videos '''
-    cursor.execute(query1)
-    mydb.commit()
-    t1=cursor.fetchall()
-    st.write(pd.DataFrame(t1, columns=["video title","channel name"]))
+    #SQL Queries for Analysis:
+        # Provides a selection of SQL queries for data analysis and displays the results in the Streamlit interface.
 
-elif question=="2. Which channels have the most number of videos, and how many videos do they have?":
-    query2=query2='''select channel_name as channelname, Total_Videos as totalvideos from channels order by Total_Videos desc'''
-    cursor.execute(query2)
-    mydb.commit()
-    t2=cursor.fetchall()
-    st.write(pd.DataFrame(t2, columns=["channel name","total videos"]))
-
-
-elif question=="3. What are the top 10 most viewed videos and their respective channels?":
-    query3='''select channel_name as channelname, Title as videoname, views from videos order by views desc limit 10'''
-    cursor.execute(query3)
-    mydb.commit()
-    t3=cursor.fetchall()
-    st.write(pd.DataFrame(t3, columns=["channel name","video name","views"]))
+    question=st.selectbox("SELECT YOUR QUESTION",("",
+                                                "1. What are the names of all the videos and their corresponding channels?",
+                                                "2. Which channels have the most number of videos, and how many videos do they have?",
+                                                "3. What are the top 10 most viewed videos and their respective channels?",
+                                                "4. How many comments were made on each video, and what are their corresponding video names?",
+                                                "5. Which videos have the highest number of likes, and what are their corresponding channel names?",
+                                                "6. What is the total number of likes and dislikes for each video, and what are their corresponding video names?",
+                                                "7. What is the total number of views for each channel, and what are their corresponding channel names?",
+                                                "8. What are the names of all the channels that have published videos in the year 2022?",
+                                                "9. What is the average duration of all videos in each channel, and what are their corresponding channel names?",
+                                                "10. Which videos have the highest number of comments, and what are their corresponding channel names?"))
 
 
-elif question=="4. How many comments were made on each video, and what are their corresponding video names?":
-    query4='''select Title as videoname, Comments from videos where Comments is not null order by Comments desc'''
-    cursor.execute(query4)
-    mydb.commit()
-    t4=cursor.fetchall()
-    st.write(pd.DataFrame(t4, columns=["video name","comment count"]))
+    if question=="1. What are the names of all the videos and their corresponding channels?":
+        query1='''select title as videos, channel_name as channelname from videos '''
+        cursor.execute(query1)
+        mydb.commit()
+        t1=cursor.fetchall()
+        st.write(pd.DataFrame(t1, columns=["video title","channel name"]))
+
+    elif question=="2. Which channels have the most number of videos, and how many videos do they have?":
+        query2=query2='''select channel_name as channelname, Total_Videos as totalvideos from channels order by Total_Videos desc'''
+        cursor.execute(query2)
+        mydb.commit()
+        t2=cursor.fetchall()
+        st.write(pd.DataFrame(t2, columns=["channel name","total videos"]))
 
 
-elif question=="5. Which videos have the highest number of likes, and what are their corresponding channel names?":
-    query5='''select channel_name as channelname, Title as videoname, likes from videos where likes is not null order by likes desc'''
-    cursor.execute(query5)
-    mydb.commit()
-    t5=cursor.fetchall()
-    st.write(pd.DataFrame(t5, columns=["channel name","video name","likes count"]))
+    elif question=="3. What are the top 10 most viewed videos and their respective channels?":
+        query3='''select channel_name as channelname, Title as videoname, views from videos order by views desc limit 10'''
+        cursor.execute(query3)
+        mydb.commit()
+        t3=cursor.fetchall()
+        st.write(pd.DataFrame(t3, columns=["channel name","video name","views"]))
 
 
-elif question=="6. What is the total number of likes and dislikes for each video, and what are their corresponding video names?":
-    query6='''select channel_name as channelname, Title as videoname, likes from videos where likes is not null'''
-    cursor.execute(query6)
-    mydb.commit()
-    t6=cursor.fetchall()
-    st.write(pd.DataFrame(t6, columns=["channel name","video name","likes count"]))
+    elif question=="4. How many comments were made on each video, and what are their corresponding video names?":
+        query4='''select Title as videoname, Comments from videos where Comments is not null order by Comments desc'''
+        cursor.execute(query4)
+        mydb.commit()
+        t4=cursor.fetchall()
+        st.write(pd.DataFrame(t4, columns=["video name","comment count"]))
 
 
-elif question=="7. What is the total number of views for each channel, and what are their corresponding channel names?":
-    query7='''select channel_name as channelname, views from channels'''
-    cursor.execute(query7)
-    mydb.commit()
-    t7=cursor.fetchall()
-    st.write(pd.DataFrame(t7, columns=["channel name","total views"]))
+    elif question=="5. Which videos have the highest number of likes, and what are their corresponding channel names?":
+        query5='''select channel_name as channelname, Title as videoname, likes from videos where likes is not null order by likes desc'''
+        cursor.execute(query5)
+        mydb.commit()
+        t5=cursor.fetchall()
+        st.write(pd.DataFrame(t5, columns=["channel name","video name","likes count"]))
 
 
-elif question=="8. What are the names of all the channels that have published videos in the year 2022?":
-    query8='''select distinct(channel_name) as channelname from videos where year(Published_Date)=2022'''
-    cursor.execute(query8)
-    mydb.commit()
-    t8=cursor.fetchall()
-    st.write(pd.DataFrame(t8, columns=["channel name"]))
+    elif question=="6. What is the total number of likes and dislikes for each video, and what are their corresponding video names?":
+        query6='''select channel_name as channelname, Title as videoname, likes from videos where likes is not null'''
+        cursor.execute(query6)
+        mydb.commit()
+        t6=cursor.fetchall()
+        st.write(pd.DataFrame(t6, columns=["channel name","video name","likes count"]))
 
 
-elif question=="9. What is the average duration of all videos in each channel, and what are their corresponding channel names?":
-    query9='''SELECT Channel_Name, avg(Duration) as average_duration FROM youtube_data.videos group by Channel_Name'''
-    cursor.execute(query9)
-    mydb.commit()
-    t9=cursor.fetchall()
-    st.write(pd.DataFrame(t9, columns=["channel name", "average duration"]))
+    elif question=="7. What is the total number of views for each channel, and what are their corresponding channel names?":
+        query7='''select channel_name as channelname, views from channels'''
+        cursor.execute(query7)
+        mydb.commit()
+        t7=cursor.fetchall()
+        st.write(pd.DataFrame(t7, columns=["channel name","total views"]))
 
 
-elif question=="10. Which videos have the highest number of comments, and what are their corresponding channel names?":
-    query10='''SELECT Channel_Name, Title, Comments FROM youtube_data.videos order by comments desc'''
-    cursor.execute(query10)
-    mydb.commit()
-    t10=cursor.fetchall()
-    st.write(pd.DataFrame(t10, columns=["channel name", "video name", "total comments"]))
+    elif question=="8. What are the names of all the channels that have published videos in the year 2022?":
+        query8='''select distinct(channel_name) as channelname from videos where year(Published_Date)=2022'''
+        cursor.execute(query8)
+        mydb.commit()
+        t8=cursor.fetchall()
+        st.write(pd.DataFrame(t8, columns=["channel name"]))
+
+
+    elif question=="9. What is the average duration of all videos in each channel, and what are their corresponding channel names?":
+        query9='''SELECT Channel_Name, avg(Duration) as average_duration FROM youtube_data.videos group by Channel_Name'''
+        cursor.execute(query9)
+        mydb.commit()
+        t9=cursor.fetchall()
+        st.write(pd.DataFrame(t9, columns=["channel name", "average duration"]))
+
+
+    elif question=="10. Which videos have the highest number of comments, and what are their corresponding channel names?":
+        query10='''SELECT Channel_Name, Title, Comments FROM youtube_data.videos order by comments desc'''
+        cursor.execute(query10)
+        mydb.commit()
+        t10=cursor.fetchall()
+        st.write(pd.DataFrame(t10, columns=["channel name", "video name", "total comments"]))
