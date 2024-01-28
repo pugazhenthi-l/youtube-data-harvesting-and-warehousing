@@ -8,15 +8,11 @@ import mysql.connector
 import pymysql
 import pymongo
 import pandas as pd
-from datetime import datetime
 import re
+from datetime import datetime
 import streamlit as st
 import numpy as np
 from PIL import Image
-
-import json
-import requests
-from streamlit_lottie import st_lottie  
 
 # YouTube API Connection
 # Establishes a connection to the YouTube API using a developer key.
