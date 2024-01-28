@@ -1,6 +1,9 @@
 # YOUTUBE DATA HARVESTING AND WAREHOUSING SCRIPT
 
 # Setup and Initial Imports
+# install all the require lab.
+pip install --upgrade google-api-python-client mysql-connector-python pymysql pymongo pandas streamlit numpy Pillow
+
 # Imports necessary libraries for API connections, database operations, data manipulation, and creating a web interface.
 
 from googleapiclient.discovery import build
